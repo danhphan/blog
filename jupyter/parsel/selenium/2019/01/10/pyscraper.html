@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Scraping with Parsel and selenium | Danh Phan’s Blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Scraping with Parsel and selenium" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Python scraper for web pages with and without java scripts" />
+<meta property="og:description" content="Python scraper for web pages with and without java scripts" />
+<link rel="canonical" href="https://danhphan.github.io/blog/jupyter/parsel/selenium/2019/01/10/pyscraper.html" />
+<meta property="og:url" content="https://danhphan.github.io/blog/jupyter/parsel/selenium/2019/01/10/pyscraper.html" />
+<meta property="og:site_name" content="Danh Phan’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-01-10T00:00:00-06:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Scraping with Parsel and selenium" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2019-01-10T00:00:00-06:00","datePublished":"2019-01-10T00:00:00-06:00","description":"Python scraper for web pages with and without java scripts","headline":"Scraping with Parsel and selenium","mainEntityOfPage":{"@type":"WebPage","@id":"https://danhphan.github.io/blog/jupyter/parsel/selenium/2019/01/10/pyscraper.html"},"url":"https://danhphan.github.io/blog/jupyter/parsel/selenium/2019/01/10/pyscraper.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://danhphan.github.io/blog/feed.xml" title="Danh Phan's Blog" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Danh Phan&#39;s Blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Scraping with Parsel and selenium</h1><p class="page-description">Python scraper for web pages with and without java scripts</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2019-01-10T00:00:00-06:00" itemprop="datePublished">
+        Jan 10, 2019
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      10 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/blog/categories/#jupyter">jupyter</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#parsel">parsel</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#selenium">selenium</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/danhphan/blog/tree/master/_notebooks/2019-01-10-pyscraper.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/danhphan/blog/master?filepath=_notebooks%2F2019-01-10-pyscraper.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/danhphan/blog/blob/master/_notebooks/2019-01-10-pyscraper.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h3"><a href="#Parsel-usage">Parsel usage </a></li>
+<li class="toc-entry toc-h3"><a href="#A-look-at-CaffeF">A look at CaffeF </a></li>
+<li class="toc-entry toc-h3"><a href="#A-look-at-Vndirect">A look at Vndirect </a></li>
+<li class="toc-entry toc-h3"><a href="#A-look-at-BDS-VN">A look at BDS VN </a></li>
+<li class="toc-entry toc-h3"><a href="#Selinium">Selinium </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2019-01-10-pyscraper.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Parsel-usage">
+<a class="anchor" href="#Parsel-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Parsel usage<a class="anchor-link" href="#Parsel-usage"> </a>
+</h3>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">text</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">"&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello, Parsel!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;"</span>
+<span class="n">sl</span> <span class="o">=</span> <span class="n">Selector</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">'h1'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&lt;Selector xpath='descendant-or-self::h1' data='&lt;h1&gt;Hello, Parsel!&lt;/h1&gt;'&gt;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sl</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">'//h1'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&lt;Selector xpath='//h1' data='&lt;h1&gt;Hello, Parsel!&lt;/h1&gt;'&gt;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sl</span><span class="o">.</span><span class="n">css</span><span class="p">(</span><span class="s1">'h1::text'</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>'Hello, Parsel!'</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sl</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">'//h1/text()'</span><span class="p">)</span><span class="o">.</span><span class="n">getall</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>['Hello, Parsel!']</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="A-look-at-CaffeF">
+<a class="anchor" href="#A-look-at-CaffeF" aria-hidden="true"><span class="octicon octicon-link"></span></a>A look at CaffeF<a class="anchor-link" href="#A-look-at-CaffeF"> </a>
+</h3>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">url</span> <span class="o">=</span> <span class="s1">'https://s.cafef.vn/Lich-su-giao-dich-FPT-1.chn'</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cf</span> <span class="o">=</span> <span class="n">Selector</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rows</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">"//table[@id='GirdTable2']/tr[@id]"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">"td[@class='Item_DateItem']/text()"</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="n">pr_scale</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">"td[@class='Item_Price10'][1]/text()"</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="n">pr_close</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">"td[@class='Item_Price10'][2]/text()"</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">pr_scale</span><span class="p">,</span> <span class="n">pr_close</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>15/01/2021 66.60  66.60 
+14/01/2021 66.40  66.40 
+13/01/2021 66.50  66.50 
+12/01/2021 65.80  65.80 
+11/01/2021 64.70  64.70 
+08/01/2021 63.30  63.30 
+07/01/2021 62.50  62.50 
+06/01/2021 62.40  62.40 
+05/01/2021 62.70  62.70 
+04/01/2021 60.20  60.20 
+31/12/2020 59.10  59.10 
+30/12/2020 58.10  58.10 
+29/12/2020 58.60  58.60 
+28/12/2020 57.90  57.90 
+25/12/2020 57.60  57.60 
+24/12/2020 57.00  57.00 
+23/12/2020 57.50  57.50 
+22/12/2020 58.10  58.10 
+21/12/2020 57.50  57.50 
+18/12/2020 56.90  56.90 
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="A-look-at-Vndirect">
+<a class="anchor" href="#A-look-at-Vndirect" aria-hidden="true"><span class="octicon octicon-link"></span></a>A look at Vndirect<a class="anchor-link" href="#A-look-at-Vndirect"> </a>
+</h3>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">url</span> <span class="o">=</span> <span class="s1">'https://dstock.vndirect.com.vn/lich-su-gia/FPT'</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+<span class="n">vndr</span> <span class="o">=</span> <span class="n">Selector</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">vndr</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;Selector xpath=None data='&lt;html&gt;&lt;head&gt;&lt;meta name="viewport" con...'&gt;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tbs</span> <span class="o">=</span> <span class="n">vndr</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">"//table/tbody"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tbs</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&lt;Selector xpath='//table/tbody' data='&lt;tbody&gt;&lt;/tbody&gt;'&gt;,
+ &lt;Selector xpath='//table/tbody' data='&lt;tbody&gt;&lt;/tbody&gt;'&gt;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">tb</span> <span class="ow">in</span> <span class="n">tbs</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tb</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">"/tr"</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+    
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>None
+None
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="A-look-at-BDS-VN">
+<a class="anchor" href="#A-look-at-BDS-VN" aria-hidden="true"><span class="octicon octicon-link"></span></a>A look at BDS VN<a class="anchor-link" href="#A-look-at-BDS-VN"> </a>
+</h3>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">urls</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'All'</span>    <span class="p">:</span> <span class="s1">'https://batdongsan.com.vn/nha-dat-ban'</span><span class="p">,</span>
+    <span class="s1">'Apartment'</span> <span class="p">:</span> <span class="s1">'https://batdongsan.com.vn/ban-can-ho-chung-cu'</span><span class="p">,</span>
+    <span class="s1">'All House'</span><span class="p">:</span> <span class="s1">'https://batdongsan.com.vn/ban-nha-dat'</span><span class="p">,</span>
+    <span class="s1">'Normal House'</span> <span class="p">:</span> <span class="s1">'https://batdongsan.com.vn/ban-nha-rieng'</span><span class="p">,</span>
+    <span class="s1">'Villa House'</span> <span class="p">:</span> <span class="s1">'https://batdongsan.com.vn/ban-nha-biet-thu-lien-ke'</span><span class="p">,</span>
+    <span class="s1">'Biz House'</span> <span class="p">:</span> <span class="s1">'https://batdongsan.com.vn/ban-nha-mat-pho'</span><span class="p">,</span>
+    <span class="s1">'All Land'</span>   <span class="p">:</span> <span class="s1">'https://batdongsan.com.vn/ban-dat-dat-nen'</span><span class="p">,</span>
+    <span class="s1">'Project Land'</span><span class="p">:</span> <span class="s1">'https://batdongsan.com.vn/ban-dat-nen-du-an'</span><span class="p">,</span>
+    <span class="s1">'Normal Land'</span> <span class="p">:</span> <span class="s1">'https://batdongsan.com.vn/ban-dat'</span><span class="p">,</span>
+    <span class="s1">'Farm'</span>   <span class="p">:</span> <span class="s1">'https://batdongsan.com.vn/ban-trang-trai-khu-nghi-duong'</span><span class="p">,</span>
+    <span class="s1">'Warehouse'</span> <span class="p">:</span> <span class="s1">'https://batdongsan.com.vn/ban-kho-nha-xuong'</span><span class="p">,</span>
+    <span class="s1">'Other'</span> <span class="p">:</span> <span class="s1">'https://batdongsan.com.vn/ban-loai-bat-dong-san-khac'</span> 
+    
+<span class="p">}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">date</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>'18/12/2020'</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">bdses</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">cat</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">bds</span> <span class="o">=</span> <span class="n">Selector</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">bds</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">"//div/h1/text()"</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="n">bds</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">"//div/span[@id='count-number']/text()"</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="n">bdses</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">cat</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">number</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">cat</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">number</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>All Mua bán nhà đất toàn quốc 18/12/2020 191,499
+Apartment Bán căn hộ chung cư tại Việt Nam 18/12/2020 43,442
+All House Nhà bán tại Việt Nam 18/12/2020 81,289
+Normal House Bán nhà riêng tại Việt Nam 18/12/2020 44,433
+Villa House Bán nhà biệt thự, liền kề tại Việt Nam 18/12/2020 14,450
+Biz House Bán nhà mặt phố tại Việt Nam 18/12/2020 22,400
+All Land Đất bán tại Việt Nam 18/12/2020 64,971
+Project Land Bán đất nền dự án tại Việt Nam 18/12/2020 18,763
+Normal Land Bán đất tại Việt Nam 18/12/2020 46,216
+Farm Bán trang trại, khu nghỉ dưỡng tại Việt Nam 18/12/2020 424
+Warehouse Bán kho, nhà xưởng tại Việt Nam 18/12/2020 551
+Other Bán loại bất động sản khác tại Việt Nam 18/12/2020 830
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">bdses</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'Type'</span><span class="p">,</span><span class="s1">'Desc'</span><span class="p">,</span><span class="s1">'Date'</span><span class="p">,</span><span class="s1">'Count'</span><span class="p">])</span>
+<span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Type</th>
+      <th>Desc</th>
+      <th>Date</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>All</td>
+      <td>Mua bán nhà đất toàn quốc</td>
+      <td>18/12/2020</td>
+      <td>191,499</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Apartment</td>
+      <td>Bán căn hộ chung cư tại Việt Nam</td>
+      <td>18/12/2020</td>
+      <td>43,442</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>All House</td>
+      <td>Nhà bán tại Việt Nam</td>
+      <td>18/12/2020</td>
+      <td>81,289</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Normal House</td>
+      <td>Bán nhà riêng tại Việt Nam</td>
+      <td>18/12/2020</td>
+      <td>44,433</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Villa House</td>
+      <td>Bán nhà biệt thự, liền kề tại Việt Nam</td>
+      <td>18/12/2020</td>
+      <td>14,450</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Biz House</td>
+      <td>Bán nhà mặt phố tại Việt Nam</td>
+      <td>18/12/2020</td>
+      <td>22,400</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>All Land</td>
+      <td>Đất bán tại Việt Nam</td>
+      <td>18/12/2020</td>
+      <td>64,971</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Project Land</td>
+      <td>Bán đất nền dự án tại Việt Nam</td>
+      <td>18/12/2020</td>
+      <td>18,763</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Normal Land</td>
+      <td>Bán đất tại Việt Nam</td>
+      <td>18/12/2020</td>
+      <td>46,216</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Farm</td>
+      <td>Bán trang trại, khu nghỉ dưỡng tại Việt Nam</td>
+      <td>18/12/2020</td>
+      <td>424</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Warehouse</td>
+      <td>Bán kho, nhà xưởng tại Việt Nam</td>
+      <td>18/12/2020</td>
+      <td>551</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Other</td>
+      <td>Bán loại bất động sản khác tại Việt Nam</td>
+      <td>18/12/2020</td>
+      <td>830</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Selinium">
+<a class="anchor" href="#Selinium" aria-hidden="true"><span class="octicon octicon-link"></span></a>Selinium<a class="anchor-link" href="#Selinium"> </a>
+</h3>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.chrome.options</span> <span class="kn">import</span> <span class="n">Options</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">By</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support.ui</span> <span class="kn">import</span> <span class="n">WebDriverWait</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.support</span> <span class="kn">import</span> <span class="n">expected_conditions</span> <span class="k">as</span> <span class="n">EC</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">PATH</span> <span class="o">=</span> <span class="s1">'/home/danph/drivers/chromedriver'</span>
+
+<span class="k">def</span> <span class="nf">get_driver</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="n">chrome_options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+    <span class="n">chrome_options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--headless"</span><span class="p">)</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span>
+        <span class="n">executable_path</span><span class="o">=</span><span class="n">PATH</span><span class="p">,</span> 
+        <span class="n">options</span><span class="o">=</span><span class="n">chrome_options</span><span class="p">)</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">driver</span>
+
+<span class="k">def</span> <span class="nf">get_driver2</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="c1"># Use headless option to not open a new browser window</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">ChromeOptions</span><span class="p">()</span>
+    <span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"headless"</span><span class="p">)</span>
+    <span class="n">desired_capabilities</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">to_capabilities</span><span class="p">()</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">executable_path</span><span class="o">=</span><span class="n">PATH</span><span class="p">,</span> <span class="n">desired_capabilities</span><span class="o">=</span><span class="n">desired_capabilities</span><span class="p">)</span>
+    <span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">driver</span>
+
+<span class="k">def</span> <span class="nf">get_table_results</span><span class="p">(</span><span class="n">driver</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements_by_xpath</span><span class="p">(</span><span class="s2">"//table[contains(@id,'GirdTable')]//tr[@id]"</span><span class="p">):</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">([</span><span class="n">cell</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">find_elements_by_xpath</span><span class="p">(</span><span class="s2">"./td[position()&lt;=3]"</span><span class="p">)])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%H:%M:%S'</span><span class="p">),</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%M-</span><span class="si">%d</span><span class="s1">'</span><span class="p">),</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%M-</span><span class="si">%d</span><span class="s1">_%H:%M:%S'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>('15:30:42', '2021-30-17', '2021-30-17_15:30:42')</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">URL</span> <span class="o">=</span> <span class="s1">'https://s.cafef.vn/Lich-su-giao-dich-MVB-1.chn'</span>
+<span class="n">driver</span> <span class="o">=</span> <span class="n">get_driver</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements_by_xpath</span><span class="p">(</span><span class="s2">"//table[contains(@id,'GirdTable')]//tr[@id]"</span><span class="p">):</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">([</span><span class="n">cell</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">find_elements_by_xpath</span><span class="p">(</span><span class="s2">"./td[position()&lt;=3]"</span><span class="p">)])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>['15/01/2021', '13.80 ', '13.80 ']
+['14/01/2021', '12.60 ', '12.60 ']
+['13/01/2021', '12.50 ', '12.50 ']
+['12/01/2021', '12.70 ', '12.70 ']
+['11/01/2021', '12.60 ', '12.60 ']
+['08/01/2021', '12.90 ', '12.90 ']
+['07/01/2021', '12.40 ', '12.40 ']
+['06/01/2021', '12.40 ', '12.40 ']
+['05/01/2021', '12.40 ', '12.40 ']
+['04/01/2021', '12.00 ', '12.00 ']
+['31/12/2020', '12.00 ', '12.00 ']
+['30/12/2020', '12.00 ', '12.00 ']
+['29/12/2020', '12.00 ', '12.00 ']
+['28/12/2020', '12.00 ', '12.00 ']
+['25/12/2020', '12.00 ', '12.00 ']
+['24/12/2020', '12.00 ', '12.00 ']
+['23/12/2020', '12.00 ', '12.00 ']
+['22/12/2020', '12.00 ', '12.00 ']
+['21/12/2020', '12.00 ', '12.00 ']
+['18/12/2020', '11.60 ', '11.60 ']
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">page_number</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span><span class="s2">"//table[@class='CafeF_Paging']//td/span"</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Page #"</span> <span class="o">+</span> <span class="n">page_number</span><span class="p">)</span>
+        <span class="n">get_table_results</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+        
+        <span class="n">next_link</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element_by_xpath</span><span class="p">(</span><span class="s2">"//table[@class='CafeF_Paging']//a[contains(@title,'Next to Page')]"</span><span class="p">)</span>
+        <span class="n">next_link</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="c1">#WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH,"//table[@id='GirdTable2']")))</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="ne">Exception</span><span class="p">)</span>
+        <span class="k">break</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Page #1
+['22/12/2020', '29.50 ', '29.50 ']
+['21/12/2020', '30.20 ', '30.20 ']
+['18/12/2020', '31.05 ', '31.05 ']
+['17/12/2020', '30.90 ', '30.90 ']
+['16/12/2020', '31.20 ', '31.20 ']
+['15/12/2020', '29.80 ', '29.80 ']
+['14/12/2020', '29.60 ', '29.60 ']
+['11/12/2020', '29.50 ', '29.50 ']
+['10/12/2020', '29.65 ', '29.65 ']
+['09/12/2020', '30.40 ', '30.40 ']
+['08/12/2020', '30.30 ', '30.30 ']
+['07/12/2020', '30.60 ', '30.60 ']
+['04/12/2020', '30.35 ', '30.35 ']
+['03/12/2020', '30.80 ', '30.80 ']
+['02/12/2020', '30.80 ', '30.80 ']
+['01/12/2020', '30.45 ', '30.45 ']
+['30/11/2020', '30.30 ', '30.30 ']
+['27/11/2020', '29.70 ', '29.70 ']
+['26/11/2020', '29.10 ', '29.10 ']
+['25/11/2020', '28.60 ', '28.60 ']
+Page #2
+['23/11/2020', '28.70 ', '28.70 ']
+['20/11/2020', '28.60 ', '28.60 ']
+['19/11/2020', '28.50 ', '28.50 ']
+['18/11/2020', '28.80 ', '28.80 ']
+['17/11/2020', '29.00 ', '29.00 ']
+['16/11/2020', '28.80 ', '28.80 ']
+['13/11/2020', '29.10 ', '29.10 ']
+['12/11/2020', '29.10 ', '29.10 ']
+['11/11/2020', '29.30 ', '29.30 ']
+['10/11/2020', '29.50 ', '29.50 ']
+['09/11/2020', '29.60 ', '29.60 ']
+['06/11/2020', '29.20 ', '29.20 ']
+['05/11/2020', '29.40 ', '29.40 ']
+['04/11/2020', '29.45 ', '29.45 ']
+['03/11/2020', '29.30 ', '29.30 ']
+['02/11/2020', '28.25 ', '28.25 ']
+['30/10/2020', '28.10 ', '28.10 ']
+['29/10/2020', '28.00 ', '28.00 ']
+['28/10/2020', '28.20 ', '28.20 ']
+['27/10/2020', '28.70 ', '28.70 ']
+Page #3
+['26/10/2020', '29.00 ', '29.00 ']
+['23/10/2020', '29.30 ', '29.30 ']
+['22/10/2020', '29.30 ', '29.30 ']
+['21/10/2020', '29.20 ', '29.20 ']
+['20/10/2020', '29.20 ', '29.20 ']
+['19/10/2020', '29.30 ', '29.30 ']
+['16/10/2020', '29.50 ', '29.50 ']
+['15/10/2020', '29.90 ', '29.90 ']
+['14/10/2020', '30.00 ', '30.00 ']
+['13/10/2020', '30.20 ', '30.20 ']
+['12/10/2020', '30.00 ', '30.00 ']
+['09/10/2020', '30.35 ', '30.35 ']
+['08/10/2020', '30.35 ', '30.35 ']
+['07/10/2020', '30.25 ', '30.25 ']
+['06/10/2020', '30.45 ', '30.45 ']
+['05/10/2020', '30.35 ', '30.35 ']
+['02/10/2020', '30.05 ', '30.05 ']
+['01/10/2020', '30.70 ', '30.70 ']
+['30/09/2020', '29.45 ', '29.45 ']
+['29/09/2020', '29.50 ', '29.50 ']
+Page #4
+['28/09/2020', '29.70 ', '29.70 ']
+['25/09/2020', '29.75 ', '29.75 ']
+['24/09/2020', '29.60 ', '29.60 ']
+['23/09/2020', '29.80 ', '29.80 ']
+['22/09/2020', '29.55 ', '29.55 ']
+['21/09/2020', '29.50 ', '29.50 ']
+['18/09/2020', '29.50 ', '29.50 ']
+['17/09/2020', '29.25 ', '29.25 ']
+['16/09/2020', '29.65 ', '29.65 ']
+['15/09/2020', '29.80 ', '29.80 ']
+['14/09/2020', '30.05 ', '30.05 ']
+['11/09/2020', '29.60 ', '29.60 ']
+['10/09/2020', '29.75 ', '29.75 ']
+['09/09/2020', '29.50 ', '29.50 ']
+['08/09/2020', '28.65 ', '28.65 ']
+['07/09/2020', '28.40 ', '28.40 ']
+['04/09/2020', '28.25 ', '28.25 ']
+['03/09/2020', '28.05 ', '28.05 ']
+['01/09/2020', '28.45 ', '28.45 ']
+['31/08/2020', '27.85 ', '27.85 ']
+Page #5
+['28/08/2020', '28.15 ', '28.15 ']
+['27/08/2020', '27.15 ', '27.15 ']
+['26/08/2020', '25.73 ', '28.30 ']
+['25/08/2020', '25.68 ', '28.25 ']
+['24/08/2020', '25.86 ', '28.45 ']
+['21/08/2020', '25.73 ', '28.30 ']
+['20/08/2020', '25.50 ', '28.05 ']
+['19/08/2020', '25.64 ', '28.20 ']
+['18/08/2020', '25.91 ', '28.50 ']
+['17/08/2020', '25.82 ', '28.40 ']
+['14/08/2020', '25.91 ', '28.50 ']
+['13/08/2020', '26.00 ', '28.60 ']
+['12/08/2020', '25.55 ', '28.10 ']
+['11/08/2020', '24.91 ', '27.40 ']
+['10/08/2020', '24.09 ', '26.50 ']
+['07/08/2020', '24.41 ', '26.85 ']
+['06/08/2020', '24.36 ', '26.80 ']
+['05/08/2020', '24.27 ', '26.70 ']
+['04/08/2020', '24.09 ', '26.50 ']
+['03/08/2020', '24.09 ', '26.50 ']
+Page #6
+['31/07/2020', '24.00 ', '26.40 ']
+['30/07/2020', '23.91 ', '26.30 ']
+['29/07/2020', '24.36 ', '26.80 ']
+['28/07/2020', '23.91 ', '26.30 ']
+['27/07/2020', '23.64 ', '26.00 ']
+['24/07/2020', '24.09 ', '26.50 ']
+['23/07/2020', '24.45 ', '26.90 ']
+['22/07/2020', '24.36 ', '26.80 ']
+['21/07/2020', '24.23 ', '26.65 ']
+['20/07/2020', '24.09 ', '26.50 ']
+['17/07/2020', '24.18 ', '26.60 ']
+['16/07/2020', '24.27 ', '26.70 ']
+['15/07/2020', '24.18 ', '26.60 ']
+['14/07/2020', '24.00 ', '26.40 ']
+['13/07/2020', '24.00 ', '26.40 ']
+['10/07/2020', '24.09 ', '26.50 ']
+['09/07/2020', '24.27 ', '26.70 ']
+['08/07/2020', '24.09 ', '26.50 ']
+['07/07/2020', '24.18 ', '26.60 ']
+['06/07/2020', '24.55 ', '27.00 ']
+Page #7
+['03/07/2020', '24.45 ', '26.90 ']
+['02/07/2020', '24.73 ', '27.20 ']
+['01/07/2020', '24.82 ', '27.30 ']
+['30/06/2020', '24.73 ', '27.20 ']
+['29/06/2020', '24.73 ', '27.20 ']
+['26/06/2020', '25.27 ', '27.80 ']
+['25/06/2020', '25.27 ', '27.80 ']
+['24/06/2020', '25.55 ', '28.10 ']
+['23/06/2020', '24.95 ', '27.45 ']
+['22/06/2020', '24.91 ', '27.40 ']
+['19/06/2020', '24.91 ', '27.40 ']
+['18/06/2020', '24.64 ', '27.10 ']
+['17/06/2020', '24.64 ', '27.10 ']
+['16/06/2020', '24.64 ', '27.10 ']
+['15/06/2020', '24.45 ', '26.90 ']
+['12/06/2020', '24.64 ', '27.10 ']
+['11/06/2020', '24.64 ', '27.10 ']
+['10/06/2020', '24.82 ', '27.30 ']
+['09/06/2020', '24.82 ', '27.30 ']
+['08/06/2020', '25.00 ', '27.50 ']
+Page #8
+['05/06/2020', '24.73 ', '27.20 ']
+['04/06/2020', '24.64 ', '27.10 ']
+['03/06/2020', '24.64 ', '27.10 ']
+['02/06/2020', '24.64 ', '27.10 ']
+['01/06/2020', '24.73 ', '27.20 ']
+['29/05/2020', '24.73 ', '27.20 ']
+['28/05/2020', '24.77 ', '27.25 ']
+['27/05/2020', '24.64 ', '27.10 ']
+['26/05/2020', '24.82 ', '27.30 ']
+['25/05/2020', '24.73 ', '27.20 ']
+['22/05/2020', '24.73 ', '27.20 ']
+['21/05/2020', '25.00 ', '27.50 ']
+['20/05/2020', '24.91 ', '27.40 ']
+['19/05/2020', '24.91 ', '27.40 ']
+['18/05/2020', '24.86 ', '27.35 ']
+['15/05/2020', '24.86 ', '27.35 ']
+['14/05/2020', '24.82 ', '27.30 ']
+['13/05/2020', '24.82 ', '27.30 ']
+['12/05/2020', '24.91 ', '27.40 ']
+['11/05/2020', '24.91 ', '27.40 ']
+Page #9
+['08/05/2020', '24.68 ', '27.15 ']
+['07/05/2020', '24.64 ', '27.10 ']
+['06/05/2020', '24.64 ', '27.10 ']
+['05/05/2020', '24.82 ', '27.30 ']
+['04/05/2020', '24.82 ', '27.30 ']
+['29/04/2020', '25.27 ', '27.80 ']
+['28/04/2020', '23.95 ', '26.35 ']
+['27/04/2020', '24.09 ', '26.50 ']
+['24/04/2020', '24.27 ', '26.70 ']
+['23/04/2020', '24.73 ', '27.20 ']
+['22/04/2020', '24.91 ', '27.40 ']
+['21/04/2020', '25.09 ', '27.60 ']
+['20/04/2020', '25.50 ', '28.05 ']
+['17/04/2020', '25.64 ', '28.20 ']
+['16/04/2020', '25.36 ', '27.90 ']
+['15/04/2020', '26.18 ', '28.80 ']
+['14/04/2020', '26.36 ', '29.00 ']
+['13/04/2020', '26.82 ', '29.50 ']
+['10/04/2020', '25.73 ', '28.30 ']
+['09/04/2020', '25.91 ', '28.50 ']
+Page #10
+['08/04/2020', '26.05 ', '28.65 ']
+['07/04/2020', '25.82 ', '28.40 ']
+['06/04/2020', '25.64 ', '28.20 ']
+['03/04/2020', '25.45 ', '28.00 ']
+['01/04/2020', '24.09 ', '26.50 ']
+['31/03/2020', '23.91 ', '26.30 ']
+['30/03/2020', '23.95 ', '26.35 ']
+['27/03/2020', '24.41 ', '26.85 ']
+['26/03/2020', '24.73 ', '27.20 ']
+['25/03/2020', '24.73 ', '27.20 ']
+['24/03/2020', '24.09 ', '26.50 ']
+['23/03/2020', '23.73 ', '26.10 ']
+['20/03/2020', '24.05 ', '26.45 ']
+['19/03/2020', '23.73 ', '26.10 ']
+['18/03/2020', '23.82 ', '26.20 ']
+['17/03/2020', '23.86 ', '26.25 ']
+['16/03/2020', '24.18 ', '26.60 ']
+['13/03/2020', '24.18 ', '26.60 ']
+['12/03/2020', '24.09 ', '26.50 ']
+['11/03/2020', '24.14 ', '26.55 ']
+Page #11
+['10/03/2020', '24.64 ', '27.10 ']
+['09/03/2020', '24.59 ', '27.05 ']
+['06/03/2020', '25.27 ', '27.80 ']
+['05/03/2020', '25.32 ', '27.85 ']
+['04/03/2020', '25.45 ', '28.00 ']
+['03/03/2020', '25.41 ', '27.95 ']
+['02/03/2020', '25.18 ', '27.70 ']
+['28/02/2020', '24.95 ', '27.45 ']
+['27/02/2020', '25.77 ', '28.35 ']
+['26/02/2020', '25.95 ', '28.55 ']
+['25/02/2020', '26.14 ', '28.75 ']
+['24/02/2020', '26.09 ', '28.70 ']
+['21/02/2020', '26.18 ', '28.80 ']
+['20/02/2020', '26.18 ', '28.80 ']
+['19/02/2020', '26.27 ', '28.90 ']
+['18/02/2020', '26.23 ', '28.85 ']
+['17/02/2020', '26.36 ', '29.00 ']
+['14/02/2020', '26.23 ', '28.85 ']
+['13/02/2020', '26.32 ', '28.95 ']
+['12/02/2020', '26.41 ', '29.05 ']
+Page #12
+['11/02/2020', '26.64 ', '29.30 ']
+['10/02/2020', '26.86 ', '29.55 ']
+['07/02/2020', '26.77 ', '29.45 ']
+['06/02/2020', '26.95 ', '29.65 ']
+['05/02/2020', '26.91 ', '29.60 ']
+['04/02/2020', '27.00 ', '29.70 ']
+['03/02/2020', '26.82 ', '29.50 ']
+['31/01/2020', '27.05 ', '29.75 ']
+['30/01/2020', '27.45 ', '30.20 ']
+['22/01/2020', '27.36 ', '30.10 ']
+['21/01/2020', '27.09 ', '29.80 ']
+['20/01/2020', '26.95 ', '29.65 ']
+['17/01/2020', '27.00 ', '29.70 ']
+['16/01/2020', '27.14 ', '29.85 ']
+['15/01/2020', '26.95 ', '29.65 ']
+['14/01/2020', '26.82 ', '29.50 ']
+['13/01/2020', '27.41 ', '30.15 ']
+['10/01/2020', '27.64 ', '30.40 ']
+['09/01/2020', '27.27 ', '30.00 ']
+&lt;class 'Exception'&gt;
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="danhphan/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blog/jupyter/parsel/selenium/2019/01/10/pyscraper.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Danh Phan&#39;s Blog with Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/danhphan" target="_blank" title="danhphan"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/danhpt" target="_blank" title="danhpt"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Collecting Melbourne housing price by Beautiful Soup | Danh Phan’s Blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Collecting Melbourne housing price by Beautiful Soup" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In this tutorial we will scrap housing price in Melbourne." />
+<meta property="og:description" content="In this tutorial we will scrap housing price in Melbourne." />
+<link rel="canonical" href="https://danhphan.github.io/blog/jupyter/beautifulsoup/web%20scraping/2019/06/10/house-price-scraper.html" />
+<meta property="og:url" content="https://danhphan.github.io/blog/jupyter/beautifulsoup/web%20scraping/2019/06/10/house-price-scraper.html" />
+<meta property="og:site_name" content="Danh Phan’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-10T00:00:00-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Collecting Melbourne housing price by Beautiful Soup" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2019-06-10T00:00:00-05:00","datePublished":"2019-06-10T00:00:00-05:00","description":"In this tutorial we will scrap housing price in Melbourne.","headline":"Collecting Melbourne housing price by Beautiful Soup","mainEntityOfPage":{"@type":"WebPage","@id":"https://danhphan.github.io/blog/jupyter/beautifulsoup/web%20scraping/2019/06/10/house-price-scraper.html"},"url":"https://danhphan.github.io/blog/jupyter/beautifulsoup/web%20scraping/2019/06/10/house-price-scraper.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://danhphan.github.io/blog/feed.xml" title="Danh Phan's Blog" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Danh Phan&#39;s Blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Collecting Melbourne housing price by Beautiful Soup</h1><p class="page-description">In this tutorial we will scrap housing price in Melbourne.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2019-06-10T00:00:00-05:00" itemprop="datePublished">
+        Jun 10, 2019
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      2 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/blog/categories/#jupyter">jupyter</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#beautifulsoup">beautifulsoup</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#web scraping">web scraping</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/danhphan/blog/tree/master/_notebooks/2019-06-10-house-price-scraper.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/danhphan/blog/master?filepath=_notebooks%2F2019-06-10-house-price-scraper.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/danhphan/blog/blob/master/_notebooks/2019-06-10-house-price-scraper.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h4"><a href="#Required-python-packages">Required python packages </a></li>
+<li class="toc-entry toc-h4"><a href="#Check-results">Check results </a></li>
+<li class="toc-entry toc-h4"><a href="#Store-results">Store results </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2019-06-10-house-price-scraper.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In this tutorial we will scrap housing price in Melbourne from this web site: <a href="https://www.domain.com.au/auction-results/melbourne/">https://www.domain.com.au/auction-results/melbourne/</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Required-python-packages">
+<a class="anchor" href="#Required-python-packages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Required python packages<a class="anchor-link" href="#Required-python-packages"> </a>
+</h4>
+<blockquote>
+<p>We need urllib for connect to the website, and BeautifulSoup for parsing html sources.
+After that, the data can be stored in a json file.</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="kn">from</span> <span class="nn">urllib.error</span> <span class="kn">import</span> <span class="n">HTTPError</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">getListings</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="s2">"Get a list of auction results"</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Parsing data</span>
+        <span class="n">bs</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="s1">'html.parser'</span><span class="p">)</span>
+        <span class="n">articles</span> <span class="o">=</span> <span class="n">bs</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s1">'article'</span><span class="p">,</span> <span class="p">{</span><span class="s1">'class'</span><span class="p">:</span><span class="s1">'css-3xqrp1'</span><span class="p">})</span>
+        <span class="k">for</span> <span class="n">atc</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">atc</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'header'</span><span class="p">:</span>
+                    <span class="n">suburb</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">h3</span><span class="o">.</span><span class="n">text</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'ul'</span><span class="p">:</span>
+                    <span class="n">getListing</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">suburb</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    
+<span class="k">def</span> <span class="nf">getListing</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">suburb</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s2">" Get a list in each suburb "</span>
+    <span class="n">ladd</span><span class="p">,</span><span class="n">lagen</span><span class="p">,</span><span class="n">htype</span><span class="p">,</span><span class="n">hInfo</span><span class="p">,</span><span class="n">soldInfo</span><span class="p">,</span><span class="n">price</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="s2">"Unknown"</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)])</span>
+    <span class="n">listing</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+    <span class="n">ladd</span>  <span class="o">=</span> <span class="n">listing</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+    <span class="k">if</span> <span class="n">listing</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'li'</span><span class="p">:</span>
+        <span class="n">htype</span><span class="p">,</span><span class="n">hInfo</span> <span class="o">=</span> <span class="n">getHouseInfo</span><span class="p">(</span><span class="n">listing</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">listing</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'li'</span><span class="p">:</span>
+        <span class="n">soldInfo</span><span class="p">,</span><span class="n">price</span> <span class="o">=</span> <span class="n">getSoldInfo</span><span class="p">(</span><span class="n">listing</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">listing</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">'li'</span><span class="p">:</span>
+        <span class="n">lagen</span> <span class="o">=</span> <span class="n">listing</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+    <span class="n">listings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">{</span><span class="s1">'suburb'</span><span class="p">:</span><span class="n">suburb</span><span class="p">,</span> <span class="s1">'street'</span><span class="p">:</span><span class="n">ladd</span><span class="p">,</span> <span class="s1">'agent'</span><span class="p">:</span><span class="n">lagen</span><span class="p">,</span> <span class="s1">'type'</span><span class="p">:</span> <span class="n">htype</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">:</span> <span class="n">hInfo</span><span class="p">,</span> 
+                      <span class="s1">'sold'</span><span class="p">:</span><span class="n">soldInfo</span><span class="p">,</span> <span class="s1">'price'</span><span class="p">:</span><span class="n">price</span><span class="p">})</span>
+    
+<span class="k">def</span> <span class="nf">getSoldInfo</span><span class="p">(</span><span class="n">tag</span><span class="p">):</span>
+    <span class="n">sold</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sold</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span> <span class="k">return</span> <span class="n">sold</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">sold</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+    <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">sold</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">"Unknown"</span>
+
+<span class="k">def</span> <span class="nf">getHouseInfo</span><span class="p">(</span><span class="n">tag</span><span class="p">):</span>
+    <span class="n">house</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">house</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span> <span class="k">return</span> <span class="n">house</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">house</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+    <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">house</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s2">"Unknown"</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">listings</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Store all listings</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">"https://www.domain.com.au/auction-results/melbourne/"</span>
+<span class="n">getListings</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Check-results">
+<a class="anchor" href="#Check-results" aria-hidden="true"><span class="octicon octicon-link"></span></a>Check results<a class="anchor-link" href="#Check-results"> </a>
+</h4>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">listings</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>637</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">listings</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[{'suburb': 'Abbotsford',
+  'street': '1/47 Nicholson St',
+  'agent': 'Biggin &amp; Scott Richmond',
+  'type': 'Townhouse',
+  'info': '2 beds',
+  'sold': 'Sold prior to auction',
+  'price': '$1.12m'},
+ {'suburb': 'Abbotsford',
+  'street': '12 Paterson St',
+  'agent': 'Biggin &amp; Scott Richmond',
+  'type': 'House',
+  'info': '4 beds',
+  'sold': 'Sold',
+  'price': '$1.886m'},
+ {'suburb': 'Abbotsford',
+  'street': '4 Turner St',
+  'agent': 'Jellis Craig Fitzroy',
+  'type': 'House',
+  'info': '3 beds',
+  'sold': 'Sold',
+  'price': 'Price withheld'},
+ {'suburb': 'Airport West',
+  'street': '2/74 Fraser St',
+  'agent': 'Barry Plant Essendon',
+  'type': 'Unit',
+  'info': '3 beds',
+  'sold': 'Sold prior to auction',
+  'price': '$671.5k'}]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Store-results">
+<a class="anchor" href="#Store-results" aria-hidden="true"><span class="octicon octicon-link"></span></a>Store results<a class="anchor-link" href="#Store-results"> </a>
+</h4>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">'listings.json'</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">listings</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">'listings.json'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(637, 7)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>suburb</th>
+      <th>street</th>
+      <th>agent</th>
+      <th>type</th>
+      <th>info</th>
+      <th>sold</th>
+      <th>price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Abbotsford</td>
+      <td>34 Albert St</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>Unknown</td>
+      <td>House</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Abbotsford</td>
+      <td>1/47 Nicholson St</td>
+      <td>Biggin &amp; Scott Richmond</td>
+      <td>Townhouse</td>
+      <td>2 beds</td>
+      <td>Sold prior to auction</td>
+      <td>$1.12m</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Abbotsford</td>
+      <td>12 Paterson St</td>
+      <td>Biggin &amp; Scott Richmond</td>
+      <td>House</td>
+      <td>4 beds</td>
+      <td>Sold</td>
+      <td>$1.886m</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Abbotsford</td>
+      <td>4 Turner St</td>
+      <td>Jellis Craig Fitzroy</td>
+      <td>House</td>
+      <td>3 beds</td>
+      <td>Sold</td>
+      <td>Price withheld</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Airport West</td>
+      <td>2/74 Fraser St</td>
+      <td>Barry Plant Essendon</td>
+      <td>Unit</td>
+      <td>3 beds</td>
+      <td>Sold prior to auction</td>
+      <td>$671.5k</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'type'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'bar'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;AxesSubplot:&gt;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'info'</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">'bar'</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;AxesSubplot:&gt;</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="danhphan/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blog/jupyter/beautifulsoup/web%20scraping/2019/06/10/house-price-scraper.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Danh Phan&#39;s Blog with Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/danhphan" target="_blank" title="danhphan"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/danhpt" target="_blank" title="danhpt"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
