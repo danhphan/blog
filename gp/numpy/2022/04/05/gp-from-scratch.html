@@ -8,8 +8,8 @@
 <meta name="generator" content="Jekyll v4.1.1" />
 <meta property="og:title" content="Gaussian Process from Scratch" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Implement Gaussian Process from Scratch by using numpy ans scipy" />
-<meta property="og:description" content="Implement Gaussian Process from Scratch by using numpy ans scipy" />
+<meta name="description" content="Implement Gaussian Process from Scratch by using numpy and scipy" />
+<meta property="og:description" content="Implement Gaussian Process from Scratch by using numpy and scipy" />
 <link rel="canonical" href="https://danhphan.github.io/blog/gp/numpy/2022/04/05/gp-from-scratch.html" />
 <meta property="og:url" content="https://danhphan.github.io/blog/gp/numpy/2022/04/05/gp-from-scratch.html" />
 <meta property="og:site_name" content="Danh Phan’s Blog" />
@@ -18,7 +18,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Gaussian Process from Scratch" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-04-05T00:00:00-05:00","datePublished":"2022-04-05T00:00:00-05:00","description":"Implement Gaussian Process from Scratch by using numpy ans scipy","headline":"Gaussian Process from Scratch","mainEntityOfPage":{"@type":"WebPage","@id":"https://danhphan.github.io/blog/gp/numpy/2022/04/05/gp-from-scratch.html"},"url":"https://danhphan.github.io/blog/gp/numpy/2022/04/05/gp-from-scratch.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-04-05T00:00:00-05:00","datePublished":"2022-04-05T00:00:00-05:00","description":"Implement Gaussian Process from Scratch by using numpy and scipy","headline":"Gaussian Process from Scratch","mainEntityOfPage":{"@type":"WebPage","@id":"https://danhphan.github.io/blog/gp/numpy/2022/04/05/gp-from-scratch.html"},"url":"https://danhphan.github.io/blog/gp/numpy/2022/04/05/gp-from-scratch.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://danhphan.github.io/blog/feed.xml" title="Danh Phan's Blog" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
@@ -73,7 +73,7 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Gaussian Process from Scratch</h1><p class="page-description">Implement Gaussian Process from Scratch by using numpy ans scipy</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-04-05T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Gaussian Process from Scratch</h1><p class="page-description">Implement Gaussian Process from Scratch by using numpy and scipy</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-04-05T00:00:00-05:00" itemprop="datePublished">
         Apr 5, 2022
       </time>
        • <span class="read-time" title="Estimated read time">
@@ -121,6 +121,7 @@ window.onload = wrap_img;
 
   <div class="post-content e-content" itemprop="articleBody">
     <ul id="toc" class="section-nav">
+<li class="toc-entry toc-h3"><a href="#Exponentiated-quadratic-kernel">Exponentiated quadratic kernel </a></li>
 <li class="toc-entry toc-h3"><a href="#Sampling-from-prior">Sampling from prior </a></li>
 <li class="toc-entry toc-h3"><a href="#TODO:-Convert-K-1-by-using-cholesky">TODO: Convert K-1 by using cholesky </a></li>
 </ul><!--
@@ -163,6 +164,15 @@ window.onload = wrap_img;
 </div>
     
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Exponentiated-quadratic-kernel">
+<a class="anchor" href="#Exponentiated-quadratic-kernel" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exponentiated quadratic kernel<a class="anchor-link" href="#Exponentiated-quadratic-kernel"> </a>
+</h3>
+</div>
+</div>
+</div>
     
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -174,8 +184,7 @@ window.onload = wrap_img;
     <span class="sd">"""Exponentiated quadratic  with σ=1"""</span>
     <span class="c1"># L2 distance (Squared Euclidian)</span>
     <span class="n">sq_norm</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">xa</span><span class="p">,</span> <span class="n">xb</span><span class="p">,</span> <span class="s1">'sqeuclidean'</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">sq_norm</span><span class="p">)</span>
-    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">sq_norm</span><span class="p">)</span>  
 </pre></div>
 
     </div>
