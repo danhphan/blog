@@ -3,7 +3,7 @@
     
         "post0": {
             "title": "A better way to learn Gaussian Process (once GP, always GP)",
-            "content": "1. Pre-knowledge . Before moving to Gaussian Process, a Bayesian non-parametric method | .",
+            "content": "1. Pre-knowledge . Before moving to Gaussian Process, a Bayesian non-parametric method, one should be familiar with parametric Bayesian models | Firstly, I will start from Richard McElreath&#39;s Statistical Rethinking by watching his lecture on Youtube, reading the book and doing excercises. The homework solution coded in PyMC is here thanks to Gabriel B.C. | I prefer Python, so I will use the PyMC implemetation of the book. | Secondly, Bayesian Analysis with Python (second edition) by Osvaldo Martin | . 2. Gaussian Process .",
             "url": "https://danhphan.github.io/blog/gp/gaussian%20process/2022/04/20/learn-gaussian-process.html",
             "relUrl": "/gp/gaussian%20process/2022/04/20/learn-gaussian-process.html",
             "date": " • Apr 20, 2022"
