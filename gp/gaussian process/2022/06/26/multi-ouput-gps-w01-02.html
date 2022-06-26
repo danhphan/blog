@@ -8,8 +8,8 @@
 <meta name="generator" content="Jekyll v4.1.1" />
 <meta property="og:title" content="Multi-output Gaussian Processes in PyMC [GSoC Week 01-02]" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="A personal note on the progress of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC. This work is supported by GSoC, NumFOCUS, and PyMC team. Week 01-02 focuses on implementing Intrinsic Coregionalization Model (ICM) in PyMC." />
-<meta property="og:description" content="A personal note on the progress of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC. This work is supported by GSoC, NumFOCUS, and PyMC team. Week 01-02 focuses on implementing Intrinsic Coregionalization Model (ICM) in PyMC." />
+<meta name="description" content="A personal note on the progress of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC. This work is supported by GSoC, NumFOCUS, and PyMC team. Week 01-02 focuses on implementing Intrinsic Coregionalization Model (ICM)." />
+<meta property="og:description" content="A personal note on the progress of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC. This work is supported by GSoC, NumFOCUS, and PyMC team. Week 01-02 focuses on implementing Intrinsic Coregionalization Model (ICM)." />
 <link rel="canonical" href="https://danhphan.github.io/blog/gp/gaussian%20process/2022/06/26/multi-ouput-gps-w01-02.html" />
 <meta property="og:url" content="https://danhphan.github.io/blog/gp/gaussian%20process/2022/06/26/multi-ouput-gps-w01-02.html" />
 <meta property="og:site_name" content="Danh Phan’s Blog" />
@@ -18,7 +18,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Multi-output Gaussian Processes in PyMC [GSoC Week 01-02]" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-06-26T00:00:00-05:00","datePublished":"2022-06-26T00:00:00-05:00","description":"A personal note on the progress of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC. This work is supported by GSoC, NumFOCUS, and PyMC team. Week 01-02 focuses on implementing Intrinsic Coregionalization Model (ICM) in PyMC.","headline":"Multi-output Gaussian Processes in PyMC [GSoC Week 01-02]","mainEntityOfPage":{"@type":"WebPage","@id":"https://danhphan.github.io/blog/gp/gaussian%20process/2022/06/26/multi-ouput-gps-w01-02.html"},"url":"https://danhphan.github.io/blog/gp/gaussian%20process/2022/06/26/multi-ouput-gps-w01-02.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-06-26T00:00:00-05:00","datePublished":"2022-06-26T00:00:00-05:00","description":"A personal note on the progress of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC. This work is supported by GSoC, NumFOCUS, and PyMC team. Week 01-02 focuses on implementing Intrinsic Coregionalization Model (ICM).","headline":"Multi-output Gaussian Processes in PyMC [GSoC Week 01-02]","mainEntityOfPage":{"@type":"WebPage","@id":"https://danhphan.github.io/blog/gp/gaussian%20process/2022/06/26/multi-ouput-gps-w01-02.html"},"url":"https://danhphan.github.io/blog/gp/gaussian%20process/2022/06/26/multi-ouput-gps-w01-02.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://danhphan.github.io/blog/feed.xml" title="Danh Phan's Blog" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
@@ -73,13 +73,13 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Multi-output Gaussian Processes in PyMC [GSoC Week 01-02]</h1><p class="page-description">A personal note on the progress of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC. This work is supported by GSoC, NumFOCUS, and PyMC team. Week 01-02 focuses on implementing Intrinsic Coregionalization Model (ICM) in PyMC.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-06-26T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Multi-output Gaussian Processes in PyMC [GSoC Week 01-02]</h1><p class="page-description">A personal note on the progress of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC. This work is supported by GSoC, NumFOCUS, and PyMC team. Week 01-02 focuses on implementing Intrinsic Coregionalization Model (ICM).</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-06-26T00:00:00-05:00" itemprop="datePublished">
         Jun 26, 2022
       </time>
        • <span class="read-time" title="Estimated read time">
     
     
-      1 min read
+      2 min read
     
 </span></p>
 
@@ -121,11 +121,11 @@ window.onload = wrap_img;
 
   <div class="post-content e-content" itemprop="articleBody">
     <ul id="toc" class="section-nav">
-<li class="toc-entry toc-h3"><a href="#1.-What-have-been-done?">1. What have been done? </a></li>
+<li class="toc-entry toc-h3"><a href="#1.-What-has-been-done?">1. What has been done? </a></li>
 <li class="toc-entry toc-h3"><a href="#2.-Discussions">2. Discussions </a>
 <ul>
-<li class="toc-entry toc-h5"><a href="#Mass-matrix-contains-zeros-on-the-diagonal">Mass matrix contains zeros on the diagonal </a></li>
-<li class="toc-entry toc-h5"><a href="#How-to-use-Kronecker-product?">How to use Kronecker product? </a></li>
+<li class="toc-entry toc-h5"><a href="#The-issue-of-Mass-matrix-contains-zeros-on-the-diagonal">The issue of Mass matrix contains zeros on the diagonal </a></li>
+<li class="toc-entry toc-h5"><a href="#How-to-use-a-Kronecker-product?">How to use a Kronecker product? </a></li>
 </ul>
 </li>
 <li class="toc-entry toc-h3"><a href="#3.-Next-steps">3. Next steps </a></li>
@@ -141,19 +141,19 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="1.-What-have-been-done?">
-<a class="anchor" href="#1.-What-have-been-done?" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. What have been done?<a class="anchor-link" href="#1.-What-have-been-done?"> </a>
+<h3 id="1.-What-has-been-done?">
+<a class="anchor" href="#1.-What-has-been-done?" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. What has been done?<a class="anchor-link" href="#1.-What-has-been-done?"> </a>
 </h3>
-<p>In previous weeks, I focus on the implementation of Intrinsic Coregionalization Model (ICM) in PyMC.</p>
+<p>In the previous weeks, I focused on implementing the Intrinsic Coregionalization Model (ICM) in PyMC.</p>
 <ul>
 <li>
-<p>For the begining, I've started with a small goal, which is to run an Intrinsic Coregionalization Model (ICM) in PyMC. The main part of code was already developed in PyMC v3 by Bill Engels (one of my mentor), so I just need to convert the <a href="https://github.com/danhphan/gp_experiments/blob/main/experiments/00_mogp_pymc3.ipynb">PyMC v3 notebook</a> into a <a href="https://github.com/danhphan/gp_experiments/blob/main/experiments/00_mogp_pymc_v4.ipynb">PyMC v4 notebook</a>.</p>
+<p>In the beginning, I've started with a small goal, which is to run an Intrinsic Coregionalization Model (ICM) in PyMC. The main part of codes was already developed in PyMC v3 by Bill Engels (one of my mentors), so I just need to convert the <a href="https://github.com/danhphan/gp_experiments/blob/main/experiments/00_mogp_pymc3.ipynb">PyMC v3 notebook</a> into a <a href="https://github.com/danhphan/gp_experiments/blob/main/experiments/00_mogp_pymc_v4.ipynb">PyMC v4 notebook</a>.</p>
 </li>
 <li>
-<p>The next goal is to replicate the Coregionalized Regression Model <a href="https://nbviewer.org/github/SheffieldML/notebook/blob/master/GPy/coregionalized_regression_tutorial.ipynb">example notebook</a> in GPy. The result is on <a href="https://github.com/danhphan/gp_experiments/blob/main/experiments/12_Coregionalized_Regression_Model_GPy_PyMC.ipynb">this notebook</a>. In addition, the example from GPytorch also be translated into PyMC <a href="https://github.com/danhphan/gp_experiments/blob/main/experiments/05_multitask_gp_regression_pymc4_3outputs.ipynb">here</a> with 3 dimentional outputs.</p>
+<p>The next goal is replicating the Coregionalized Regression Model <a href="https://nbviewer.org/github/SheffieldML/notebook/blob/master/GPy/coregionalized_regression_tutorial.ipynb">example notebook</a> in GPy. The result if ICM for this dataset is in <a href="https://github.com/danhphan/gp_experiments/blob/main/experiments/12_Coregionalized_Regression_Model_GPy_PyMC.ipynb">this notebook</a>. In addition, the example from GPytorch also be translated into PyMC <a href="https://github.com/danhphan/gp_experiments/blob/main/experiments/05_multitask_gp_regression_pymc4_3outputs.ipynb">here</a> with 3 dimensional outputs.</p>
 </li>
 <li>
-<p>What about two or more ouputs with real datasets? Using the data sets <a href="https://github.com/GAMES-UChile/mogptk/blob/master/examples/example_gold_oil_NASDAQ_USD.ipynb">here</a> with 4 ouputs, it seems work alright in <a href="https://github.com/danhphan/gp_experiments/blob/main/experiments/15_multitask_gp_for_gold_oil_nasdaq_usd.ipynb">this notebook</a>, but still need further improvement.</p>
+<p>What about two or more outputs with real datasets? Using the data sets <a href="https://github.com/GAMES-UChile/mogptk/blob/master/examples/example_gold_oil_NASDAQ_USD.ipynb">here</a> with 4 outputs: GOLD, OIL, NASDAQ, and USD. It seems to work alright in <a href="https://github.com/danhphan/gp_experiments/blob/main/experiments/15_multitask_gp_for_gold_oil_nasdaq_usd.ipynb">this notebook</a>, but it still needs further improvement.</p>
 </li>
 </ul>
 
@@ -172,15 +172,15 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>There are several issues along the way:</p>
-<h5 id="Mass-matrix-contains-zeros-on-the-diagonal">
-<a class="anchor" href="#Mass-matrix-contains-zeros-on-the-diagonal" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mass matrix contains zeros on the diagonal<a class="anchor-link" href="#Mass-matrix-contains-zeros-on-the-diagonal"> </a>
+<p>There are several issues that I faced along the way:</p>
+<h5 id="The-issue-of-Mass-matrix-contains-zeros-on-the-diagonal">
+<a class="anchor" href="#The-issue-of-Mass-matrix-contains-zeros-on-the-diagonal" aria-hidden="true"><span class="octicon octicon-link"></span></a>The issue of Mass matrix contains zeros on the diagonal<a class="anchor-link" href="#The-issue-of-Mass-matrix-contains-zeros-on-the-diagonal"> </a>
 </h5>
-<p>This seems an popular issue: <code>ValueError: Mass matrix contains zeros on the diagonal.</code> when input y with shape [n,1]</p>
-<p>Should we use inputs and outputs as list similar to GPy: <code>[x1, x2, x3]</code> and <code>[y1, y2, y3]</code>? The pros is that it can include datasets with diffent sizes (len).</p>
-<p>The output shape was discussed on <a href="https://github.com/pymc-devs/pymc/pull/4764">this pull request</a>.</p>
-<h5 id="How-to-use-Kronecker-product?">
-<a class="anchor" href="#How-to-use-Kronecker-product?" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to use Kronecker product?<a class="anchor-link" href="#How-to-use-Kronecker-product?"> </a>
+<p>This seems a popular issue: <code>ValueError: Mass matrix contains zeros on the diagonal.</code> when input y with shape [n,1]</p>
+<p>Should we use inputs and outputs as a list similar to GPy: <code>[x1, x2, x3]</code> and <code>[y1, y2, y3]</code>? The pros is that it can include datasets of different sizes.</p>
+<p>The output shape was also discussed on <a href="https://github.com/pymc-devs/pymc/pull/4764">this pull request</a>. I will need to look into it in detail.</p>
+<h5 id="How-to-use-a-Kronecker-product?">
+<a class="anchor" href="#How-to-use-a-Kronecker-product?" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to use a Kronecker product?<a class="anchor-link" href="#How-to-use-a-Kronecker-product?"> </a>
 </h5>
 <pre><code>with pm.Model() as model:
     ell = pm.Gamma("ell", alpha=2, beta=0.5)
@@ -210,9 +210,9 @@ window.onload = wrap_img;
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Several things that I plan to do:</p>
 <ul>
-<li>Implement the linear model of coregionalization (LMC) in PyMC: Use kronecker product with two or more different kernels</li>
-<li>Integrate ICM and LMC into PyMC gp module [Add and/or change several kernels]</li>
-<li>Write an example with real data sets. This may extend the example in part 1 above</li>
+<li>Implement the linear model of coregionalization (LMC) in PyMC: Use a kronecker product with two or more different kernels</li>
+<li>Integrate ICM and LMC into PyMC GP module [Add and/or change several kernels]</li>
+<li>Write an example with real data sets. This may extend the example with 4 outputs in Part 1 above.</li>
 </ul>
 
 </div>
