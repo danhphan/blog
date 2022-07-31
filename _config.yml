@@ -102,10 +102,10 @@ paginate_path: /page:num/
 
 remote_theme: jekyll/minima
 
-header_pages:
-  - about.html
-  - tags.html
-  - search.html
+# header_pages:
+#   - about.html
+#   - tags.html
+#   - search.html
 
 titles_from_headings:
   enabled: true
