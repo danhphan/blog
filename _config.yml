@@ -7,7 +7,7 @@
 # https://learnxinyminutes.com/docs/yaml/
 
 title: Danh Phan's Blog
-description: Danh Phan's Blog with Jupyter Notebooks.
+description: Danh Phan's Blog with Jupyter Notebooks. Back to [Home page](https://danhphan.github.io)!
 github_username: danhphan
 # you can comment the below line out if your repo name is not different than your baseurl
 github_repo: "blog"
@@ -104,9 +104,6 @@ paginate: 10
 paginate_path: /page:num/
 
 remote_theme: jekyll/minima
-
-# header_pages:
-#   - about.html
 
 titles_from_headings:
   enabled: true
