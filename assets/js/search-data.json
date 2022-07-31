@@ -185,6 +185,14 @@
   
 
   
+      ,"page8": {
+          "title": "",
+          "content": "{“/_pages/about.html”:”http://www.danhphan.github.io”} .",
+          "url": "https://danhphan.github.io/blog/redirects.json",
+          "relUrl": "/redirects.json",
+          "date": ""
+      }
+      
   
 
   
@@ -201,6 +209,9 @@
           "date": ""
       }
       
+  
+
+  
   
 
 }
