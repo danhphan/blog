@@ -104,7 +104,8 @@ remote_theme: jekyll/minima
 
 header_pages:
   - about.html
-  - tags.md
+  - tags.html
+  - search.html
 
 titles_from_headings:
   enabled: true
