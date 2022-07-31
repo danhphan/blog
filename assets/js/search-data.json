@@ -159,6 +159,22 @@
   
 
   
+      ,"page1": {
+          "title": "About",
+          "content": "",
+          "url": "https://danhphan.github.io/blog/about/",
+          "relUrl": "/about/",
+          "date": ""
+      }
+      
+  
+
+  
+
+  
+  
+
+  
 
   
   
@@ -169,11 +185,6 @@
   
 
   
-
-  
-  
-
-  
   
 
   
@@ -182,7 +193,7 @@
   
 
   
-      ,"page10": {
+      ,"page11": {
           "title": "",
           "content": "Sitemap: {{ “sitemap.xml” | absolute_url }} | .",
           "url": "https://danhphan.github.io/blog/robots.txt",
