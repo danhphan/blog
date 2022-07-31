@@ -160,10 +160,10 @@
 
   
       ,"page1": {
-          "title": "About",
+          "title": "Home",
           "content": "",
-          "url": "https://danhphan.github.io/blog/_pages/about.html",
-          "relUrl": "/_pages/about.html",
+          "url": "https://danhphan.github.io/blog/_pages/home.html",
+          "relUrl": "/_pages/home.html",
           "date": ""
       }
       
@@ -187,7 +187,7 @@
   
       ,"page8": {
           "title": "",
-          "content": "{“/_pages/about.html”:”http://www.danhphan.github.io”} .",
+          "content": "{“/_pages/home.html”:”https://danhphan.github.io”} .",
           "url": "https://danhphan.github.io/blog/redirects.json",
           "relUrl": "/redirects.json",
           "date": ""
