@@ -162,8 +162,8 @@
       ,"page1": {
           "title": "About",
           "content": "",
-          "url": "https://danhphan.github.io/blog/about/",
-          "relUrl": "/about/",
+          "url": "https://danhphan.github.io/blog/_pages/about.html",
+          "relUrl": "/_pages/about.html",
           "date": ""
       }
       
