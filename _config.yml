@@ -39,8 +39,10 @@ baseurl: "/blog" # the subpath of your site, e.g. "/blog".
 # Github and twitter are optional:
 minima:
   social_links:
-    twitter: danhpt
     github: danhphan
+    linkedin: danhpt
+    twitter: danhpt
+    
 
 # Set this to true to get LaTeX math equation support
 use_math:
@@ -93,6 +95,7 @@ plugins:
   - jekyll-remote-theme
   - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-redirect-from
   - jemoji
 
 # See https://jekyllrb.com/docs/pagination/
@@ -104,8 +107,6 @@ remote_theme: jekyll/minima
 
 # header_pages:
 #   - about.html
-#   - tags.html
-#   - search.html
 
 titles_from_headings:
   enabled: true
