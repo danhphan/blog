@@ -8,8 +8,8 @@
 <meta name="generator" content="Jekyll v4.1.1" />
 <meta property="og:title" content="Multi-output Gaussian Processes in PyMC [GSoC Final Report]" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="This post summarise the project of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC. Work has been done, and work needs to be done." />
-<meta property="og:description" content="This post summarise the project of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC. Work has been done, and work needs to be done." />
+<meta name="description" content="This post summarise the project of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC, including work has been done, and work needs to be done." />
+<meta property="og:description" content="This post summarise the project of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC, including work has been done, and work needs to be done." />
 <link rel="canonical" href="https://danhphan.github.io/blog/gp/gaussian%20process/2022/09/11/multi-ouput-gps-final-report.html" />
 <meta property="og:url" content="https://danhphan.github.io/blog/gp/gaussian%20process/2022/09/11/multi-ouput-gps-final-report.html" />
 <meta property="og:site_name" content="Danh Phan’s Blog" />
@@ -18,7 +18,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Multi-output Gaussian Processes in PyMC [GSoC Final Report]" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-11T00:00:00-05:00","datePublished":"2022-09-11T00:00:00-05:00","description":"This post summarise the project of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC. Work has been done, and work needs to be done.","headline":"Multi-output Gaussian Processes in PyMC [GSoC Final Report]","mainEntityOfPage":{"@type":"WebPage","@id":"https://danhphan.github.io/blog/gp/gaussian%20process/2022/09/11/multi-ouput-gps-final-report.html"},"url":"https://danhphan.github.io/blog/gp/gaussian%20process/2022/09/11/multi-ouput-gps-final-report.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-09-11T00:00:00-05:00","datePublished":"2022-09-11T00:00:00-05:00","description":"This post summarise the project of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC, including work has been done, and work needs to be done.","headline":"Multi-output Gaussian Processes in PyMC [GSoC Final Report]","mainEntityOfPage":{"@type":"WebPage","@id":"https://danhphan.github.io/blog/gp/gaussian%20process/2022/09/11/multi-ouput-gps-final-report.html"},"url":"https://danhphan.github.io/blog/gp/gaussian%20process/2022/09/11/multi-ouput-gps-final-report.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://danhphan.github.io/blog/feed.xml" title="Danh Phan's Blog" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
@@ -73,7 +73,7 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Multi-output Gaussian Processes in PyMC [GSoC Final Report]</h1><p class="page-description">This post summarise the project of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC. Work has been done, and work needs to be done.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-09-11T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Multi-output Gaussian Processes in PyMC [GSoC Final Report]</h1><p class="page-description">This post summarise the project of incoporating Multi-output Gaussian Processes (MOGPs) into PyMC, including work has been done, and work needs to be done.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2022-09-11T00:00:00-05:00" itemprop="datePublished">
         Sep 11, 2022
       </time>
        • <span class="read-time" title="Estimated read time">
@@ -123,7 +123,7 @@ window.onload = wrap_img;
     <ul id="toc" class="section-nav">
 <li class="toc-entry toc-h3"><a href="#1.-Work-has-been-done?">1. Work has been done? </a></li>
 <li class="toc-entry toc-h3"><a href="#2.-Work-needs-to-be-done">2. Work needs to be done </a></li>
-<li class="toc-entry toc-h3"><a href="#3.-Few-thoughts-on-the-project">3. Few thoughts on the project </a></li>
+<li class="toc-entry toc-h3"><a href="#3.-A-few-thoughts-on-the-project">3. A few thoughts on the project </a></li>
 </ul><!--
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
@@ -163,7 +163,7 @@ window.onload = wrap_img;
 <p><a href="https://danhphan.net/blog/gp/gaussian%20process/kronecker%20product/2022/09/04/multi-ouput-gps-w10-12.html">Weeks 10-12</a> focus on implementing ICM and LCM using Kronecker product. It is noted that this Kronecker product can ONLY work with same input data. In addition, The kernels for input data need to be stationary.</p>
 </li>
 <li>
-<p>Create a <a href="">PR draft</a> on PyMC github repo. This is a work-in-progress (WIP) PR as I still need to try different APIs options for different kinds of input data.</p>
+<p>Create a <a href="https://github.com/pymc-devs/pymc-experimental/pull/79">PR</a> on pymc-experimental github repo. This is a work-in-progress (WIP) PR as I still need to try and test different APIs options for different kinds of input data.</p>
 </li>
 </ul>
 
@@ -188,8 +188,8 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="3.-Few-thoughts-on-the-project">
-<a class="anchor" href="#3.-Few-thoughts-on-the-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. Few thoughts on the project<a class="anchor-link" href="#3.-Few-thoughts-on-the-project"> </a>
+<h3 id="3.-A-few-thoughts-on-the-project">
+<a class="anchor" href="#3.-A-few-thoughts-on-the-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. A few thoughts on the project<a class="anchor-link" href="#3.-A-few-thoughts-on-the-project"> </a>
 </h3>
 </div>
 </div>
@@ -198,8 +198,8 @@ window.onload = wrap_img;
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The project allows me to learn more on Gaussian Process (GP), its advantages and also limitations. I think GP has a huge potential for spatial and temporal (time-series) data sets.</p>
-<p>Besides, implementing GP help me further understand on MultiNormal distribution :) Alghough there are still a lot to learn and do. I'm especially interested in learning more on other methods for time-series data, and a comparison on the performance between these models.</p>
-<p>Finally, I would like to thank the PyMC devs team, especially my mentors <a href="https://github.com/fonnesbeck">Chris Fonnesbeck</a>, and <a href="https://github.com/bwengals">Bill Engels</a> for their great guidance and supports. I will definitely not able to perform the project without their helps.</p>
+<p>Besides, implementing GP helps me further understand on the Multivariate Normal distribution :) Although there are still a lot to learn and do. I'm especially interested in learning more on other methods for time-series data, and a comparison on the performance between these models.</p>
+<p>Finally, I would like to thank the PyMC devs team, especially my mentors <a href="https://github.com/fonnesbeck">Chris Fonnesbeck</a>, and <a href="https://github.com/bwengals">Bill Engels</a> for their great guidance and supports. I will definitely not able to perform the project well without their insightful suggestions. I would love to involve and contribute more to the PyMC community after this project. Also thank you NumFOCUS and GSoC program for providing me this opportunity to work on the Multi-output Gaussian Processes in PyMC project.</p>
 
 </div>
 </div>
